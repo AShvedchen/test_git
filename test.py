@@ -130,7 +130,7 @@ print(f'Лектор--> {lecturer1}\n')
 print(f'Проверяющий--> {reviewer1}\n')
 print(student1 > student2)
 
-print(grades_list.extend(data))
+
 
 def average_grade_students(student_list, name_course):
     grades_list = []
