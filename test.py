@@ -34,14 +34,18 @@ class Student:
             return 'Ошибка'
 
     def __lt__(self, other):
-        if not isinstance(other, Student):
-            return 'Cравнение некорректно'
         return self.average_rating() < other.average_rating()
 
+    def __gt__(self, other):
+        return self.average_rating() > other.average_rating()
+
+    def __eq__(self, other):
+        return self.average_rating() == other.average_rating()
+
     def __str__(self):
-        string__courses_in_progress = ', '.join(self.courses_in_progress)
-        string__finished_courses = ', '.join(self.finished_courses)
-        return f'\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {Student.average_rating(self)} \nКурсы в процессе изучения: {string__courses_in_progress}\nЗавершенные курсы: {string__finished_courses}'
+        string_courses_in_progress = ', '.join(self.courses_in_progress)
+        string_finished_courses = ', '.join(self.finished_courses)
+        return f'\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_rating()} \nКурсы в процессе изучения: {string_courses_in_progress}\nЗавершенные курсы: {string_finished_courses}'
 
 
 lecturer_list = []
@@ -68,8 +72,17 @@ class Lecturer(Mentor):
             grades_list.extend(data)
         return round(sum(grades_list) / len(grades_list), 1)
 
+    def __lt__(self, other):
+        return self.average_rating() < other.average_rating()
+
+    def __gt__(self, other):
+        return self.average_rating() > other.average_rating()
+
+    def __eq__(self, other):
+        return self.average_rating() == other.average_rating()
+
     def __str__(self):
-        return f'\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка: {Lecturer.average_rating(self)}'
+        return f'\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка: {self.average_rating()}'
 
 
 class Reviewer(Mentor):
@@ -116,28 +129,44 @@ lecturer1 = Lecturer('Some', 'Buddy')
 lecturer1.courses_attached += ['Python']
 lecturer1.courses_attached += ['Git']
 
+lecturer2 = Lecturer('Some2', 'Buddy2')
+lecturer2.courses_attached += ['Git']
+lecturer2.courses_attached += ['Python']
+
 student1.rate_lecturer(lecturer1, 'Python', 9)
-student1.rate_lecturer(lecturer1, 'Python', 1)
+student1.rate_lecturer(lecturer1, 'Python', 7)
 student1.rate_lecturer(lecturer1, 'Python', 10)
 
-student2.rate_lecturer(lecturer1, 'Git', 10)
+student2.rate_lecturer(lecturer1, 'Git', 8)
 student2.rate_lecturer(lecturer1, 'Git', 9)
-student2.rate_lecturer(lecturer1, 'Git', 10)
+student2.rate_lecturer(lecturer1, 'Git', 1)
+
+student1.rate_lecturer(lecturer2, 'Python', 9)
+student1.rate_lecturer(lecturer2, 'Python', 7)
+student1.rate_lecturer(lecturer2, 'Python', 10)
+
+student2.rate_lecturer(lecturer2, 'Git', 8)
+student2.rate_lecturer(lecturer2, 'Git', 9)
+student2.rate_lecturer(lecturer2, 'Git', 1)
 
 print(f'Студент--> {student1}\n')
 print(f'Студент--> {student2}\n')
 print(f'Лектор--> {lecturer1}\n')
 print(f'Проверяющий--> {reviewer1}\n')
-print(student1 > student2)
 
+print(f'student1 {student1.average_rating()} < student2 {student2.average_rating()} {student1 < student2}\n')
+print(f'student1 {student1.average_rating()} > student2 {student2.average_rating()} {student1 > student2}\n')
+print(f'student1 {student1.average_rating()} == student2 {student2.average_rating()} {student1 == student2}\n')
+
+print(f'lecturer2 {lecturer2.average_rating()} < lecturer1 {lecturer1.average_rating()}  {lecturer2 < lecturer1}\n')
+print(f'lecturer2 {lecturer2.average_rating()} > lecturer1 {lecturer1.average_rating()} {lecturer2 > lecturer1}\n')
+print(f'lecturer2 {lecturer2.average_rating()} == lecturer1 {lecturer1.average_rating()} {lecturer2 == lecturer1}\n')
 
 
 def average_grade_students(student_list, name_course):
     grades_list = []
     for student in student_list:
         grades_list.extend(student.grades.get(name_course, []))
-    if not grades_list:
-        return "Такой курс сейчас никто не проходит"
     return round(sum(grades_list) / len(grades_list), 1)
 
 
@@ -145,8 +174,6 @@ def average_grade_lecturer(lecturer_list, name_course):
     grades_list = []
     for lecturer in lecturer_list:
         grades_list.extend(lecturer.grades.get(name_course, []))
-    if not grades_list:
-        return "Такой курс сейчас никто не проходит"
     return round(sum(grades_list) / len(grades_list), 1)
 
 
